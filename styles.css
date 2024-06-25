@@ -1,86 +1,115 @@
+
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Quicksand", sans-serif;
+}
 body {
-    font-family: 'Times New Roman', serif; /* Changed font */
-    margin: 0;
-    padding: 0;
-    background-image: url('i.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
-    min-height: 100vh;
-    min-width: 640px;
-    width: 100%;
-    height: auto;
-    position: relative; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #00b7ff93;
+  width: 100%;
+  overflow: hidden;
 }
-
-.container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+.ring {
+  position: relative;
+  width: 500px;
+  height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-
-h2 {
-    color: #ffffff; /* цвет текста */
-    margin-bottom: 10px; 
-    margin-left: 160px; 
-    text-align: left; 
-    color: #ffffff; /* дополнительный цвет текста */
+.ring i {
+  position: absolute;
+  inset: 0;
+  border: 2px solid #fff;
+  transition: 0.5s;
 }
-
-h3 {
-    color: #ffffff; /* цвет текста */
-    margin-bottom: 10px; 
-    margin-left: 110px; 
-    text-align: left; 
-    font-size: 26px;
-    color: #ffffff; /* дополнительный цвет текста */
+.ring i:nth-child(1) {
+  border-radius: 38% 62% 63% 37% / 41% 44% 56% 59%;
+  animation: animate 6s linear infinite;
 }
-
-form {
-    width: 300px; /* ширина формы */
-    margin: 2 auto; /* центрируем форму по горизонтали */
-    padding: 50px; /* внутренние отступы */
-    border-radius: 5px; /* округление углов */
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5); /* тень вокруг формы */
-    background: linear-gradient(to bottom, #ffffffce, #f0f0f094); /* градиент */
+.ring i:nth-child(2) {
+  border-radius: 41% 44% 56% 59%/38% 62% 63% 37%;
+  animation: animate 4s linear infinite;
 }
-
-
-#registration-form, #login-form, #user-panel {
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: #fff;
-    text-align: center;
-    margin-bottom: 20px;
+.ring i:nth-child(3) {
+  border-radius: 41% 44% 56% 59%/38% 62% 63% 37%;
+  animation: animate2 10s linear infinite;
 }
-
-input[type="text"], input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+.ring:hover i {
+  border: 6px solid var(--clr);
+  filter: drop-shadow(0 0 20px var(--clr));
 }
-
-button {
-    padding: 10px 20px;
-    margin: 10px 0;
-    border: none;
-    border-radius: 5px;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
+@keyframes animate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
-
-button:hover {
-    background-color: #0056b3;
+@keyframes animate2 {
+  0% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
 }
-
-#user-panel {
-    position: absolute;
-    top: 20px;
-    right: 20px;
+.login {
+  position: absolute;
+  width: 300px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+}
+.login h2 {
+  font-size: 2em;
+  color: #fff;
+}
+.login .inputBx {
+  position: relative;
+  width: 100%;
+}
+.login .inputBx input {
+  position: relative;
+  width: 100%;
+  padding: 12px 20px;
+  background: transparent;
+  border: 2px solid #fff;
+  border-radius: 40px;
+  font-size: 1.2em;
+  color: #fff;
+  box-shadow: none;
+  outline: none;
+}
+.login .inputBx input[type="submit"] {
+  width: 100%;
+  background: #0078ff;
+  background: linear-gradient(45deg, #ff357a, #fff172);
+  border: none;
+  cursor: pointer;
+}
+.login .inputBx input::placeholder {
+  color: rgba(255, 255, 255, 0.75);
+}
+.login .links {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+.login .links a {
+  color: #fff;
+  text-decoration: none;
 }

@@ -1,0 +1,38 @@
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+  }
+  
+  #add-car-form {
+    margin: 20px auto;
+    width: 50%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  #car-list {
+    margin: 20px auto;
+    width: 50%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  #cars {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  #cars li {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  #cars li:last-child {
+    border-bottom: none;
+  }

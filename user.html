@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Car Dealer</title>
+  <style>
+    #cars {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+    }
+    #cars li {
+      margin: 10px;
+    }
+    #cars img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Car Dealer</h1>
+  <ul id="cars"></ul>
+
+  <script>
+    class Car {
+      constructor(make, model, year, price, image) {
+        this.make = make;
+        this.model = model;
+        this.year = year;
+        this.price = price;
+        this.image = image;
+      }
+    }
+
+    class CarDealer {
+      constructor() {
+        this.cars = this.loadCarsFromStorage();
+        this.updateCarList();
+      }
+
+      updateCarList() {
+        const carList = document.getElementById("cars");
+        carList.innerHTML = "";
+        this.cars.forEach(car => {
+          const carListItem = document.createElement("li");
+          const image = document.createElement("img");
+          image.src = car.image;
+          image.alt = `${car.make} ${car.model}`;
+          carListItem.appendChild(image);
+          carListItem.innerHTML += `
+            <div>
+              Make: ${car.make}<br>
+              Model: ${car.model}<br>
+              Year: ${car.year}<br>
+              Price: $${car.price}
+            </div>
+          `;
+          carList.appendChild(carListItem);
+        });
+      }
+
+      loadCarsFromStorage() {
+        const storedCars = localStorage.getItem('cars');
+        if (storedCars) {
+          return JSON.parse(storedCars).map(car => new Car(car.make, car.model, car.year, car.price, car.image));
+        } else {
+          return [];
+        }
+      }
+    }
+
+    const dealer = new CarDealer();
+  </script>
+</body>
+</html>

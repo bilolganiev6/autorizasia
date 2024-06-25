@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Car Dealer</title>
+  <style>
+    #cars {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+    }
+    #cars li {
+      margin: 10px;
+    }
+    #cars img { 
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Car Dealer</h1>
+  <form id="add-car-form">
+    <label for="model">Модель:</label>
+    <input type="text" id="model" name="model"><br><br>
+    <label for="year">Год:</label>
+    <input type="number" id="year" name="year"><br><br>
+    <label for="price">Цена:</label>
+    <input type="number" id="price" name="price"><br><br>
+    <label for="image">Фото:</label>
+    <input type="file" id="image" name="image" accept="image/*"><br><br>
+    <input type="submit" value="Add Car">
+  </form>
+  <ul id="cars"></ul>
+
+  <script>
+    // Определение класса Car, который представляет автомобиль
+    class Car {
+      constructor(model, year, price, image) {
+        // Конструктор класса, принимает параметры и инициализирует свойства объекта
+        this.model = model; // Модель автомобиля
+        this.year = year; // Год выпуска автомобиля
+        this.price = price; // Цена автомобиля
+        this.image = image; // URL изображения автомобиля
+      }
+    }
+
+    // Определение класса CarDealer, который представляет дилерский центр
+    class CarDealer {
+      constructor() {
+        // Конструктор класса, инициализирует список автомобилей
+        this.cars = this.loadCarsFromStorage(); // Загрузка списка автомобилей из локального хранилища
+      }
+    
+      // Метод для добавления автомобиля в список
+      addCar(car) {
+        this.cars.push(car); // Добавление автомобиля в массив
+        this.saveCarsToStorage(); // Сохранение списка автомобилей в локальное хранилище
+        this.updateCarList(); // Обновление списка автомобилей на странице
+      }
+    
+      // Метод для удаления автомобиля из списка по модели
+      removeCar(model) {
+        this.cars = this.cars.filter(car => car.model !== model); // Фильтрация списка, удаление автомобиля по модели
+        this.saveCarsToStorage(); // Сохранение обновленного списка в локальное хранилище
+        this.updateCarList(); // Обновление списка автомобилей на странице
+      }
+    
+      // Метод для обновления информации об автомобиле
+      updateCar(model, year, price, image) {
+        const car = this.cars.find(car => car.model === model); // Поиск автомобиля по модели
+        if (car) {
+          car.year = year; // Обновление года выпуска
+          car.price = price; // Обновление цены
+          car.image = image; // Обновление URL изображения
+          this.saveCarsToStorage(); // Сохранение обновленного списка автомобилей в локальном хранилище
+          this.updateCarList(); // Обновление списка автомобилей на странице
+        }
+      }
+    
+      // Метод для обновления списка автомобилей на странице
+      updateCarList() {
+        const carList = document.getElementById("cars"); // Получение элемента списка автомобилей по ID
+        carList.innerHTML = ""; // Очистка текущего содержимого списка
+        this.cars.forEach(car => {
+          // Итерация по каждому автомобилю в списке
+          const carListItem = document.createElement("li"); // Создание элемента списка для каждого автомобиля
+          const image = document.createElement("img"); // Создание элемента изображения
+          image.src = car.image; // Установка URL изображения
+          image.alt = `${car.model}`; // Установка альтернативного текста для изображения
+          image.width = 100; // Установка ширины изображения
+          carListItem.appendChild(image); // Добавление изображения в элемент списка
+          carListItem.innerHTML += `
+            <div>
+              Model: ${car.model}<br>
+              Year: ${car.year}<br>
+              Price: $${car.price}
+            </div>
+            <button class="edit-button" data-model="${car.model}">Edit</button>
+            <button class="delete-button" data-model="${car.model}">Delete</button>
+          `; // Добавление информации о автомобиле и кнопок управления в элемент списка
+          carList.appendChild(carListItem); // Добавление элемента списка в список автомобилей на странице
+        });
+      }
+    
+      // Метод для сохранения списка автомобилей в локальное хранилище
+      saveCarsToStorage() {
+        localStorage.setItem('cars', JSON.stringify(this.cars)); // Преобразование списка в строку JSON и сохранение
+      }
+    
+      // Метод для загрузки списка автомобилей из локального хранилища
+      loadCarsFromStorage() {
+        const storedCars = localStorage.getItem('cars'); // Получение списка автомобилей из локального хранилища
+        if (storedCars) {
+          // Если список автомобилей существует в хранилище
+          return JSON.parse(storedCars); // Парсинг JSON и возвращение списка
+        } else {
+          return []; // Если список автомобилей не найден, возвращается пустой массив
+        }
+      }
+    }
+
+    // Создание экземпляра класса CarDealer
+    const dealer = new CarDealer();
+
+    // Обработчик события отправки формы добавления автомобиля
+    document.getElementById("add-car-form").addEventListener("submit", event => {
+      event.preventDefault(); // Предотвращение стандартной отправки формы
+      const modelInput = document.getElementById("model"); // Получение элемента ввода модели
+      const yearInput = document.getElementById("year"); // Получение элемента ввода года
+      const priceInput = document.getElementById("price"); // Получение элемента ввода цены
+      const imageInput = document.getElementById("image"); // Получение элемента ввода изображения
+    
+      if (modelInput && yearInput && priceInput && imageInput) {
+        const model = modelInput.value; // Получение значения модели
+        const year = yearInput.value; // Получение значения года
+        const price = priceInput.value; // Получение значения цены
+        const image = imageInput.files[0]; // Получение выбранного файла изображения
+      
+        if (image) {
+          const reader = new FileReader(); // Создание объекта FileReader для чтения файла
+          reader.onload = () => {
+            // Обработчик загрузки файла
+            const car = new Car(model, year, price, reader.result); // Создание объекта Car с URL изображения
+            dealer.addCar(car); // Добавление автомобиля в дилерский центр
+            document.getElementById("add-car-form").reset(); // Сброс формы
+          };
+          reader.readAsDataURL(image); // Чтение файла как Data URL
+        } else {
+          alert("Please select an image"); // Вызов alert, если изображение не выбрано
+        }
+      }
+    });
+
+    // Обработчик события клика на элементе списка автомобилей
+    document.getElementById("cars").addEventListener("click", event => {
+      if (event.target.classList.contains("edit-button")) {
+        // Если кликнули по кнопке "Edit"
+        const model = event.target.dataset.model; // Получение модели автомобиля из атрибута data-model
+        const car = dealer.cars.find(car => car.model === model); // Поиск автомобиля по модели
+        if (car) {
+          const editForm = document.createElement("form"); // Создание формы для редактирования
+          editForm.innerHTML = `
+            <label for="model">Model:</label>
+            <input type="text" id="model" value="${car.model}"><br><br>
+            <label for="year">Year:</label>
+            <input type="number" id="year" value="${car.year}"><br><br>
+            <label for="price">Price:</label>
+            <input type="number" id="price" value="${car.price}"><br><br>
+            <label for="image">Image:</label>
+            <input type="file" id="image" accept="image/*"><br><br>
+            <input type="submit" value="Update Car">
+          `;
+          document.body.appendChild(editForm); // Добавление формы на страницу
+          editForm.addEventListener("submit", event => {
+            // Обработчик события отправки формы редактирования
+            event.preventDefault(); // Предотвращение стандартной отправки формы
+            const modelInput = document.getElementById("model"); // Получение элемента ввода модели
+            const yearInput = document.getElementById("year"); // Получение элемента ввода года
+            const priceInput = document.getElementById("price"); // Получение элемента ввода цены
+            const imageInput = document.getElementById("image"); // Получение элемента ввода изображения
+          
+            if (modelInput && yearInput && priceInput && imageInput) {
+              const model = modelInput.value; // Получение обновленного значения модели
+              const year = yearInput.value; // Получение обновленного значения года
+              const price = priceInput.value; // Получение обновленного значения цены
+              const image = imageInput.files[0]; // Получение выбранного файла изображения
+            
+              if (image) {
+                const reader = new FileReader(); // Создание объекта FileReader для чтения файла
+                reader.onload = () => {
+                  // Обработчик загрузки файла
+                  dealer.updateCar(model, year, price, reader.result); // Обновление информации об автомобиле
+                  editForm.remove(); // Удаление формы после обновления
+                };
+                reader.readAsDataURL(image); // Чтение файла как Data URL
+              } else {
+                dealer.updateCar(model, year, price, car.image); // Обновление информации об автомобиле без изменения изображения
+                editForm.remove(); // Удаление формы после обновления
+              }
+            }
+          });
+        }
+      } else if (event.target.classList.contains("delete-button")) {
+        // Если кликнули по кнопке "Delete"
+        const model = event.target.dataset.model; // Получение модели автомобиля из атрибута data-model
+        dealer.removeCar(model); // Удаление автомобиля из списка
+      }
+    });
+  </script>
+</body>
+</html>
