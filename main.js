@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', (event) => {
     // Простая база данных пользователей с предварительно заполненными данными администратора и пользователя
-    let users = [
+    let users = JSON.parse(localStorage.getItem('users')) || [
         { username: 'Билол', password: 'билол123', role: 'admin' },
         { username: 'Макс', password: 'макс123', role: 'user' },
         { username: 'Мирик', password: 'мирик123', role: 'user' },
@@ -46,6 +46,25 @@ document.addEventListener('DOMContentLoaded', (event) => {
         localStorage.removeItem('currentUser');
         // Перенаправление на index.html
         window.location.href = 'index.html';
+    }
+
+    // Функция для отображения зарегистрированных пользователей
+    function displayUsers() {
+        let userList = document.getElementById('userList');
+        if (!userList) {
+            console.error('Не удалось найти элемент для отображения пользователей.');
+            return;
+        }
+
+        // Очищаем текущий список пользователей
+        userList.innerHTML = '';
+
+        // Добавляем каждого пользователя в список
+        users.forEach(user => {
+            let li = document.createElement('li');
+            li.textContent = `Username: ${user.username}, Role: ${user.role}`;
+            userList.appendChild(li);
+        });
     }
 
     // Прикрепляем прослушиватель событий к форме
